@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, AuthContext } from './context/AuthContext';
 
 // Import Layout
 import Sidebar from './components/Sidebar';
@@ -16,8 +17,12 @@ import Resources from './pages/Resources';
 import SleepLog from './pages/SleepLog';
 import Settings from './pages/Settings';
 
-// Layout Component
-const MainLayout = ({ children }) => {
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const { user } = React.useContext(AuthContext);
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
   return (
     <div className="dashboard-container">
       <Sidebar />
@@ -30,22 +35,24 @@ const MainLayout = ({ children }) => {
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        
-        {/* Protected Routes (with Sidebar) */}
-        <Route path="/dashboard" element={<MainLayout><Dashboard /></MainLayout>} />
-        <Route path="/activity" element={<MainLayout><Activity /></MainLayout>} />
-        <Route path="/goals" element={<MainLayout><Goals /></MainLayout>} />
-        <Route path="/mindfulness" element={<MainLayout><Mindfulness /></MainLayout>} />
-        <Route path="/mood-tracker" element={<MainLayout><MoodTracker /></MainLayout>} />
-        <Route path="/profile" element={<MainLayout><Profile /></MainLayout>} />
-        <Route path="/resources" element={<MainLayout><Resources /></MainLayout>} />
-        <Route path="/sleep-log" element={<MainLayout><SleepLog /></MainLayout>} />
-        <Route path="/settings" element={<MainLayout><Settings /></MainLayout>} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          
+          {/* Protected Routes */}
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/activity" element={<ProtectedRoute><Activity /></ProtectedRoute>} />
+          <Route path="/goals" element={<ProtectedRoute><Goals /></ProtectedRoute>} />
+          <Route path="/mindfulness" element={<ProtectedRoute><Mindfulness /></ProtectedRoute>} />
+          <Route path="/mood-tracker" element={<ProtectedRoute><MoodTracker /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+          <Route path="/resources" element={<ProtectedRoute><Resources /></ProtectedRoute>} />
+          <Route path="/sleep-log" element={<ProtectedRoute><SleepLog /></ProtectedRoute>} />
+          <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
