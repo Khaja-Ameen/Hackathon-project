@@ -6,8 +6,8 @@ const Goals = () => {
   const [goals, setGoals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [newGoalText, setNewGoalText] = useState('');
-  const [searchTerm, setSearchTerm] = useState(''); // Search Feature
-  const [editingId, setEditingId] = useState(null); // Edit Feature
+  const [searchTerm, setSearchTerm] = useState(''); 
+  const [editingId, setEditingId] = useState(null); 
   const [editText, setEditText] = useState('');
 
   // 1. READ
@@ -15,7 +15,8 @@ const Goals = () => {
     if (user) {
         fetch(`http://localhost:5000/api/goals/${user.id}`)
         .then(res => res.json())
-        .then(data => { setGoals(data); setLoading(false); });
+        .then(data => { setGoals(data); setLoading(false); })
+        .catch(err => console.error("Failed to load goals", err));
     }
   }, [user]);
 
@@ -73,7 +74,7 @@ const Goals = () => {
 
       <section className="card">
         <h3 className="section-title">Set New Goals</h3>
-        <div style={{display:'flex', gap:'10px', marginBottom:'1rem'}}>
+        <div className="input-group" style={{display:'flex', gap:'10px', marginBottom:'1rem'}}>
              <input type="text" value={newGoalText} onChange={(e) => setNewGoalText(e.target.value)} placeholder="Custom goal name..." style={{padding:'10px', flex:1}} />
         </div>
         <div className="set-goal-grid">
@@ -83,39 +84,47 @@ const Goals = () => {
       </section>
 
       <section className="card">
-        <div style={{display:'flex', justifyContent:'space-between', marginBottom:'1rem'}}>
-            <h3>Current Goals</h3>
+        <div className="main-header" style={{marginBottom:'1rem'}}>
+            <h3 className="section-title" style={{marginBottom:0}}>Current Goals</h3>
+            
             {/* SEARCH BAR (Metric #11 - Advanced Feature) */}
-            <input type="text" placeholder="Search goals..." value={searchTerm} onChange={(e)=>setSearchTerm(e.target.value)} style={{padding:'5px'}}/>
+            <input 
+                type="text" 
+                placeholder="Search goals..." 
+                value={searchTerm}
+                onChange={(e)=>setSearchTerm(e.target.value)}
+                className="search-input"
+            />
         </div>
 
         {loading ? <p>Loading goals from Database...</p> : (
             <ul className="current-goals-list">
             {filteredGoals.map(goal => (
                 <li key={goal.id}>
+                    
                     <div className="goal-details">
                         {/* EDIT MODE TOGGLE */}
                         {editingId === goal.id ? (
-                            <div style={{display:'flex', gap:'5px', marginBottom:'5px'}}>
-                                <input type="text" value={editText} onChange={(e) => setEditText(e.target.value)} style={{padding:'5px'}} />
-                                <button onClick={() => saveEdit(goal.id, goal.current)} className="btn-secondary" style={{padding:'5px 10px', fontSize:'0.8rem'}}>Save</button>
+                            <div className="edit-input-group">
+                                <input type="text" value={editText} onChange={(e) => setEditText(e.target.value)} />
+                                <button onClick={() => saveEdit(goal.id, goal.current)} className="btn-secondary">Save</button>
                             </div>
                         ) : (
-                            <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
+                            <div className="goal-name-wrapper">
                                 <h4>{goal.title}</h4>
-                                <i className="fa-solid fa-pen" onClick={() => startEditing(goal)} style={{cursor:'pointer', fontSize:'0.8rem', color:'#A0AEC0'}} title="Edit Goal Name"></i>
+                                <i className="fa-solid fa-pen edit-icon" onClick={() => setEditingId(goal.id)} title="Edit Goal Name"></i>
                             </div>
                         )}
                         <progress value={goal.current} max={goal.target}></progress>
                     </div>
                     
-                    <div style={{display:'flex', alignItems:'center', gap:'15px'}}>
+                    <div className="goal-controls">
                         <span className="goal-progress">{goal.current}/{goal.target}</span>
                         {/* INCREMENT BUTTON */}
-                        <button onClick={() => incrementProgress(goal)} style={{background: '#EAF2FB', border: 'none', color: '#4A90E2', borderRadius:'50%', width:'30px', height:'30px', cursor:'pointer', display:'grid', placeItems:'center'}}>
+                        <button onClick={() => incrementProgress(goal)} className="progress-btn">
                             <i className="fa-solid fa-plus"></i>
                         </button>
-                        <button onClick={() => handleDelete(goal.id)} style={{background: 'transparent', border: 'none', color: '#F87171', cursor: 'pointer', fontSize: '1.2rem'}}>
+                        <button onClick={() => handleDelete(goal.id)} className="btn-danger" style={{background: 'transparent', border: 'none', cursor: 'pointer', fontSize: '1.2rem'}}>
                             <i className="fa-solid fa-trash"></i>
                         </button>
                     </div>

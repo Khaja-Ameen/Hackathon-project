@@ -1172,3 +1172,97 @@ a:hover {
         text-align: left;
     }
 }
+/* --- New Styles for Goals Page --- */
+
+/* Styles for the individual goal item in the list */
+.current-goals-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+    gap: 1rem;
+}
+.current-goals-list li:last-child {
+    border-bottom: none;
+}
+
+/* Container for goal title and progress bar */
+.goal-details {
+    flex-grow: 1;
+    margin-right: 1.5rem;
+}
+
+/* Dynamic goal name display and edit icon */
+.goal-name-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.goal-name-wrapper h4 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.goal-name-wrapper .edit-icon {
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    transition: color 0.2s;
+}
+.goal-name-wrapper .edit-icon:hover {
+    color: var(--primary-color);
+}
+
+/* Edit input styling */
+.edit-input-group {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    margin-bottom: 5px;
+}
+.edit-input-group input {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    flex-grow: 1;
+}
+
+/* Progress controls and counter */
+.goal-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.progress-btn {
+    background: var(--primary-light);
+    border: none;
+    color: var(--primary-color);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: background-color 0.2s;
+}
+.progress-btn:hover {
+    background-color: #dbe8f8; /* Slightly darker primary light */
+}
+
+/* Search Input Styling */
+.search-input {
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    width: 200px;
+    transition: box-shadow 0.2s;
+}
+.search-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary-light);
+    border-color: var(--primary-color);
+}
